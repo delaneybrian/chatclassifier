@@ -14,6 +14,7 @@ class Cleaner:
         tokens = self.__removeSpecialCharacters(tokens)
         tokens = self.__removeStopWords(tokens)
         tokens = self.__stem(tokens)
+        tokens = self.__removeSingles(tokens)
         return tokens
 
     def __tokenise(self, rawtext):
@@ -25,6 +26,13 @@ class Cleaner:
             normalised.append(token.lower())
         return normalised
 
+    def __removeSingles(self, tokens):
+        noSingles = []
+        for token in tokens:
+            if len(token) > 1:
+                noSingles.append(token)
+        return noSingles
+
     def __removeStopWords(self, tokens):
         stopwds = stopwords.words('english')
         removed = []
@@ -32,7 +40,7 @@ class Cleaner:
         return removed
 
     def __removeSpecialCharacters(self, tokens):
-        specialchars = ['.', '!', '?', ',']
+        specialchars = ['.', '!', '?', ',', "'"]
         for specialchar in specialchars:
             while specialchar in tokens: tokens.remove(specialchar)
         return tokens

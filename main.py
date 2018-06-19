@@ -1,18 +1,37 @@
 from repository import Repository
 from cleaner import Cleaner
+from transformer import Transformer
 from textProcessor import TextProcessor
 import json
 
 def main():
-    """
+
+    cleaner = Cleaner()
     repository = Repository()
+    transformer = Transformer()
+
 
     chat = repository.getChatById(1)
     chatdata = json.loads(chat)
-    for message in chatdata["messagelog"]:
-        print(cleaner.cleanMessage(message["content"]))
-    """
 
+    transformedChat = transformer.transformChat(chatdata)
+
+    print(transformedChat)
+    for message in transformedChat.messagelog:
+        print(message)
+
+"""
+    dict = {}
+    dict["_id"] = 4
+    dict["4"] = "james"
+    dict["3"] = "carl"
+    dict["2"] = "brian"
+    dict["1"] = "tony"
+
+    print(repository.getNextTrainedModelId())
+"""
+
+"""
     cleaner = Cleaner()
 
     message2 = "I went to Japan When I was young"
@@ -29,7 +48,7 @@ def main():
     processor = TextProcessor()
     setDict = processor.calculateTFIDF(messages)
     print(setDict)
-
+"""
 
 
 if __name__ == "__main__":
