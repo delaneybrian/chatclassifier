@@ -1,9 +1,15 @@
 import nltk
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
-from domain import MovieCharacter, Movie
+from domain import MovieCharacter, Movie, Chat, Message
 
 class Cleaner:
+
+    maxTokenLen = 20
+    minTokenLen = 3
+    maxNonEngChars = 5
+    englishLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+                      'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
     def __init__(self):
         nltk.download('punkt')
@@ -14,15 +20,21 @@ class Cleaner:
         for character in movie.characters:
             cleanedLines = []
             for line in character.lines:
-                cleanedLines.append(self.__cleanMessage(line))
+                cleanedLine = self.__cleanMessage(line)
+                if(len(cleanedLine) > 0):
+                    cleanedLines.append(self.__cleanMessage(line))
             cleanedCharacters.append(MovieCharacter(character.name, cleanedLines))
 
         return Movie(movie.id, movie.name, cleanedCharacters)
 
     def cleanChat(self, chat):
+        cleanedMessageLog = []
         for message in chat.messagelog:
-            message.content = self.__cleanMessage(message.content)
-        return chat
+            cleanedContent = self.__cleanMessage(message.content)
+            if(len(cleanedContent) > 0):
+                cleanedMessageLog.append(Message(message.sender, message.sendtime, cleanedContent))
+
+        return Chat(chat.id, chat.name, cleanedMessageLog)
 
 
 
@@ -34,6 +46,9 @@ class Cleaner:
         tokens = self.__removeStopWords(tokens)
         tokens = self.__stem(tokens)
         tokens = self.__removeSingles(tokens)
+        tokens = self.__removeLongWords(tokens)
+        tokens = self.__removeShortWords(tokens)
+        tokens = self.__removeNonEnglishWords(tokens)
         return tokens
 
     def __tokenise(self, rawtext):
@@ -57,6 +72,29 @@ class Cleaner:
         removed = []
         [removed.append(token) for token in tokens if token not in stopwds]
         return removed
+
+    def __removeLongWords(self, tokens):
+        noLongWords = []
+        [noLongWords.append(token) for token in tokens if len(token) < self.maxTokenLen]
+        return noLongWords
+
+    def __removeShortWords(self, tokens):
+        noShortWords = []
+        [noShortWords.append(token) for token in tokens if len(token) > self.minTokenLen]
+        return noShortWords
+
+    def __removeNonEnglishWords(self, tokens):
+        noNonEnglish = []
+        for token in tokens:
+            numNonEng = 0
+            chars = list(token)
+            for char in chars:
+                if char not in self.englishLetters:
+                    numNonEng += 1
+            if(numNonEng < self.maxNonEngChars):
+                noNonEnglish.append(token)
+
+        return noNonEnglish
 
     def __removeSpecialCharacters(self, tokens):
         specialchars = ['.', '!', '?', ',', "'"]
