@@ -1,18 +1,15 @@
-import pandas as pd
-import math
-
-class TextProcessor:
+class Transformer:
 
     seperator = " ++++ "
 
-    def createChatMatrixByMessage(self, text):
+    def transformChatMatrixByMessage(self, text):
         allMessages = []
         for message in text.messagelog:
            allMessages.append((message.sender, message.content))
 
-        print(allMessages)
+        return allMessages
 
-    def createChatMatrixBySender(self, text):
+    def transformChatMatrixBySender(self, text):
         allParticipants = {}
         for message in text.messagelog:
             if(message.sender in allParticipants):
@@ -23,23 +20,28 @@ class TextProcessor:
             else:
                 allParticipants[message.sender] = message.content
 
-        print(allParticipants)
+        allParticipantsList = []
+        for key in allParticipants.keys():
+            allParticipantsList.append((key, allParticipants[key]))
 
-    def createMovieMatrix(self, movie):
+        return allParticipantsList
+
+    def transformMovieMatrix(self, movie):
         allMovieChars = []
         for character in movie.characters:
-           charPlaceholder = character.name + self.seperator + movie.name + self.seperator + movie.id
+           charPlaceholder = character.name + self.seperator + movie.name + self.seperator + str(movie.id)
            allMovieChars.append((charPlaceholder, self.__combineWordLists(character.lines)))
 
-        print(allMovieChars)
+        return allMovieChars
 
-    def createMoviesMatrix(self, movies):
+    def transformMoviesMatrix(self, movies):
         allMoviesChars = []
         for movie in movies:
             chars = self.createMovieMatrix(movie)
             for char in chars:
                 allMoviesChars.append(char)
 
+        return allMoviesChars
 
     def __combineWordLists(self, wordLists):
         allWords = []

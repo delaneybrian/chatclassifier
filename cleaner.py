@@ -1,6 +1,7 @@
 import nltk
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
+from domain import MovieCharacter, Movie
 
 class Cleaner:
 
@@ -8,7 +9,25 @@ class Cleaner:
         nltk.download('punkt')
         nltk.download('stopwords')
 
-    def cleanMessage(self, rawtext):
+    def cleanMovie(self, movie):
+        cleanedCharacters = []
+        for character in movie.characters:
+            cleanedLines = []
+            for line in character.lines:
+                cleanedLines.append(self.__cleanMessage(line))
+            cleanedCharacters.append(MovieCharacter(character.name, cleanedLines))
+
+        return Movie(movie.id, movie.name, cleanedCharacters)
+
+    def cleanChat(self, chat):
+        for message in chat.messagelog:
+            message.content = self.__cleanMessage(message.content)
+        return chat
+
+
+
+
+    def __cleanMessage(self, rawtext):
         tokens = self.__tokenise(rawtext)
         tokens = self.__normalise(tokens)
         tokens = self.__removeSpecialCharacters(tokens)

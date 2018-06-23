@@ -5,7 +5,7 @@ import json
 class Repository:
 
     testCollection = "testcollection"
-    scriptCollection = "movietestcollection"
+    movieCollection = "movietestcollection"
     trainedChatCollection = "testtrainedchatcollection"
 
     def __init__(self):
@@ -16,19 +16,21 @@ class Repository:
         chatCollection = self.db[self.testCollection]
         bsonChat = chatCollection.find_one({"_id": id})
         jsonChat = dumps(bsonChat)
-        return jsonChat
+        pythonChat = json.loads(jsonChat)
+        return pythonChat
 
-    def getScriptById(self, id):
-        scriptCollection = self.db[self.scriptCollection]
-        bsonScript = scriptCollection.find_one({"_id": id})
-        jsonScript = dumps(bsonScript)
-        return jsonScript
+    def getMovieById(self, id):
+        movieCollection = self.db[self.movieCollection]
+        bsonMovie = movieCollection.find_one({"_id": id})
+        jsonMovie = dumps(bsonMovie)
+        pythonMovie = json.loads(jsonMovie)
+        return pythonMovie
 
-    def getAllScripts(self, id):
-        scriptCollection = self.db[self.scriptCollection]
-        bsonScripts = scriptCollection.find()
-        jsonScripts = dumps(bsonScripts)
-        return jsonScripts
+    def getAllMovies(self):
+        movieCollection = self.db[self.movieCollection]
+        bsonMovies = movieCollection.find()
+        jsonMovies = dumps(bsonMovies)
+        return jsonMovies
 
     def addTrainedChatModel(self, trainedChatModel):
         chatModelCollection = self.db[self.trainedChatCollection]

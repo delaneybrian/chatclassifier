@@ -1,55 +1,37 @@
 from repository import Repository
 from cleaner import Cleaner
+from chatFactory import ChatFactory
+from movieFactory import MovieFactory
 from transformer import Transformer
 from textProcessor import TextProcessor
-import json
 
 def main():
 
     cleaner = Cleaner()
     repository = Repository()
+    movieFactory = MovieFactory()
+    chatFactory = ChatFactory()
     transformer = Transformer()
+    textProcessor = TextProcessor()
+
+    rawChat = repository.getChatById(1)
+    rawMovie = repository.getMovieById(1)
+
+    chat = chatFactory.createChat(rawChat)
+    movie = movieFactory.createMovie(rawMovie)
+
+    cleanedChat = cleaner.cleanChat(chat)
+    cleanedMovie = cleaner.cleanMovie(movie)
+
+    chatMatrix1 = transformer.transformChatMatrixByMessage(cleanedChat)
+    chatMatrix2 = transformer.transformChatMatrixBySender(cleanedChat)
+    movieMatrix = transformer.transformMovieMatrix(cleanedMovie)
 
 
-    chat = repository.getChatById(1)
-    chatdata = json.loads(chat)
+    chat1 = textProcessor.createTFIDFMatrix(chatMatrix2)
 
-    transformedChat = transformer.transformChat(chatdata)
 
-    print(transformedChat)
-    for message in transformedChat.messagelog:
-        print(message)
-
-"""
-    dict = {}
-    dict["_id"] = 4
-    dict["4"] = "james"
-    dict["3"] = "carl"
-    dict["2"] = "brian"
-    dict["1"] = "tony"
-
-    print(repository.getNextTrainedModelId())
-"""
-
-"""
-    cleaner = Cleaner()
-
-    message2 = "I went to Japan When I was young"
-    message3 = "We travel alot when we are young"
-    message4 = "It was a good place to travel to"
-    message5 = "too many cooks spoil the broth"
-
-    messages = []
-    messages.append(cleaner.cleanMessage(message2))
-    messages.append(cleaner.cleanMessage(message3))
-    messages.append(cleaner.cleanMessage(message4))
-    messages.append(cleaner.cleanMessage(message5))
-
-    processor = TextProcessor()
-    setDict = processor.calculateTFIDF(messages)
-    print(setDict)
-"""
-
+    print("Finished")
 
 if __name__ == "__main__":
     main()
