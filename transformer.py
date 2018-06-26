@@ -47,17 +47,17 @@ class Transformer:
         return df
 
     def transformMoviesMatrixAsDF(self, movies):
-        allMoviesdf = pd.DataFrame()
-        print(movies)
-        for movie in movies:
-            df = self.transformMoviesMatrixAsDF(movie)
-            allMoviesdf.append(df)
+        alldf = []
+        for i in range(0, len(movies)):
+            df = self.transformMovieMatrixAsDF(movies[i])
+            alldf.append(df)
 
-        return allMoviesdf
+        return pd.concat(alldf)
 
     def __combineWordLists(self, wordLists):
         allWords = []
         for wordList in wordLists:
             for word in wordList:
                 allWords.append(word)
-        return allWords
+        return  ' '.join(allWords)
+

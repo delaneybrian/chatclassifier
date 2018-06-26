@@ -18,7 +18,7 @@ def main():
 
     rawChat = repository.getChatById(2)
     rawMovie1 = repository.getMovieById(1)
-    rawMovie2 = repository.getMovieById(2)
+    rawMovie2 = repository.getMovieById(6)
 
     chat = chatFactory.createChat(rawChat)
     movie1 = movieFactory.createMovie(rawMovie1)
