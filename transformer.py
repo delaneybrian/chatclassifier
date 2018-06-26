@@ -1,47 +1,59 @@
+import pandas as pd
+import numpy as np
+
 class Transformer:
 
     seperator = " ++++ "
+    headers = ['individual', 'content']
 
-    def transformChatMatrixByMessage(self, text):
+    def transformChatMatrixByMessageAsDF(self, text):
+
         allMessages = []
         for message in text.messagelog:
-           allMessages.append((message.sender, message.content))
+            messageContent = ' '.join(message.content)
+            fullMessage = [message.sender, messageContent]
+            allMessages.append(fullMessage)
 
-        return allMessages
+        df = pd.DataFrame.from_records(allMessages, columns=self.headers)
+        df.set_index(self.headers[0], inplace=True)
 
-    def transformChatMatrixBySender(self, text):
+        return df
+
+    def transformChatMatrixBySenderAsDF(self, text):
         allParticipants = {}
         for message in text.messagelog:
+            messageContent = ' '.join(message.content)
             if(message.sender in allParticipants):
                 currentWords = allParticipants[message.sender]
-                for word in message.content:
-                    currentWords.append(word)
+                currentWords = currentWords + ' ' + messageContent
                 allParticipants[message.sender] = currentWords
             else:
-                allParticipants[message.sender] = message.content
+                allParticipants[message.sender] = messageContent
 
-        allParticipantsList = []
-        for key in allParticipants.keys():
-            allParticipantsList.append((key, allParticipants[key]))
+        df = pd.DataFrame.from_dict(allParticipants, orient='index', columns=[self.headers[1]])
+        df.index.name = self.headers[0]
+        return df
 
-        return allParticipantsList
 
-    def transformMovieMatrix(self, movie):
+    def transformMovieMatrixAsDF(self, movie):
         allMovieChars = []
         for character in movie.characters:
            charPlaceholder = character.name + self.seperator + movie.name + self.seperator + str(movie.id)
            allMovieChars.append((charPlaceholder, self.__combineWordLists(character.lines)))
 
-        return allMovieChars
+        df = pd.DataFrame.from_records(allMovieChars, columns=self.headers)
+        df.set_index(self.headers[0], inplace=True)
 
-    def transformMoviesMatrix(self, movies):
-        allMoviesChars = []
+        return df
+
+    def transformMoviesMatrixAsDF(self, movies):
+        allMoviesdf = pd.DataFrame()
+        print(movies)
         for movie in movies:
-            chars = self.createMovieMatrix(movie)
-            for char in chars:
-                allMoviesChars.append(char)
+            df = self.transformMoviesMatrixAsDF(movie)
+            allMoviesdf.append(df)
 
-        return allMoviesChars
+        return allMoviesdf
 
     def __combineWordLists(self, wordLists):
         allWords = []
@@ -49,6 +61,3 @@ class Transformer:
             for word in wordList:
                 allWords.append(word)
         return allWords
-
-    def __combineOnParticipant(self):
-        pass

@@ -4,6 +4,7 @@ from chatFactory import ChatFactory
 from movieFactory import MovieFactory
 from transformer import Transformer
 from textProcessor import TextProcessor
+from model import Model
 
 def main():
 
@@ -13,22 +14,31 @@ def main():
     chatFactory = ChatFactory()
     transformer = Transformer()
     textProcessor = TextProcessor()
+    model = Model()
 
-    rawChat = repository.getChatById(1)
-    rawMovie = repository.getMovieById(1)
+    rawChat = repository.getChatById(2)
+    rawMovie1 = repository.getMovieById(1)
+    rawMovie2 = repository.getMovieById(2)
 
     chat = chatFactory.createChat(rawChat)
-    movie = movieFactory.createMovie(rawMovie)
+    movie1 = movieFactory.createMovie(rawMovie1)
+    movie2 = movieFactory.createMovie(rawMovie2)
 
     cleanedChat = cleaner.cleanChat(chat)
-    cleanedMovie = cleaner.cleanMovie(movie)
+    cleanedMovie1 = cleaner.cleanMovie(movie1)
+    cleanedMovie2 = cleaner.cleanMovie(movie2)
 
-    chatMatrix1 = transformer.transformChatMatrixByMessage(cleanedChat)
-    chatMatrix2 = transformer.transformChatMatrixBySender(cleanedChat)
-    movieMatrix = transformer.transformMovieMatrix(cleanedMovie)
+    chatMatrix1 = transformer.transformChatMatrixByMessageAsDF(cleanedChat)
+    chatMatrix = transformer.transformChatMatrixBySenderAsDF(cleanedChat)
+
+    moviedf = transformer.transformMoviesMatrixAsDF([cleanedMovie1, cleanedMovie2])
+
+    print(moviedf)
 
 
-    chat1 = textProcessor.createTFIDFMatrix(chatMatrix2)
+    #chat1 = textProcessor.createTFIDFMatrix(chatMatrix2)
+
+    #model.trainChatClassifier(chat1)
 
 
     print("Finished")

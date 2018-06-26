@@ -29,12 +29,8 @@ class TextProcessor:
             tfidfs.append(a[1])
             names.append(a[0])
 
-        df = pd.DataFrame.from_records(tfidfs, index=names)
-        print(df.head())
-        print("******************************************")
-        print(df.describe())
+        return pd.DataFrame.from_records(tfidfs, index=names)
 
-        return df
 
 
     def __computeTFIDF(self, tf, idf):
