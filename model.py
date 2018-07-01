@@ -1,5 +1,6 @@
 import pickle
 from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
 
 class Model:
 
@@ -9,10 +10,10 @@ class Model:
     def trainMovieClassifier(self, movieMatrix):
         pass
 
-    def trainChatClassifier(self, chatDataFrame):
-        gnb = GaussianNB()
-
-        print(chatDataFrame)
+    def trainChatClassifier(self, data, cats):
+        knn = KNeighborsClassifier()
+        knn.fit(data, cats)
+        return knn
 
     def predictChat(self, modelId, data):
         pass

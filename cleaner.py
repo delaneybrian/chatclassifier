@@ -20,9 +20,9 @@ class Cleaner:
         for character in movie.characters:
             cleanedLines = []
             for line in character.lines:
-                cleanedLine = self.__cleanMessage(line)
+                cleanedLine = self.cleanMessage(line)
                 if(len(cleanedLine) > 0):
-                    cleanedLines.append(self.__cleanMessage(line))
+                    cleanedLines.append(self.cleanMessage(line))
             cleanedCharacters.append(MovieCharacter(character.name, cleanedLines))
 
         return Movie(movie.id, movie.name, cleanedCharacters)
@@ -30,16 +30,14 @@ class Cleaner:
     def cleanChat(self, chat):
         cleanedMessageLog = []
         for message in chat.messagelog:
-            cleanedContent = self.__cleanMessage(message.content)
+            cleanedContent = self.cleanMessage(message.content)
             if(len(cleanedContent) > 0):
                 cleanedMessageLog.append(Message(message.sender, message.sendtime, cleanedContent))
 
         return Chat(chat.id, chat.name, cleanedMessageLog)
 
 
-
-
-    def __cleanMessage(self, rawtext):
+    def cleanMessage(self, rawtext):
         tokens = self.__tokenise(rawtext)
         tokens = self.__normalise(tokens)
         tokens = self.__removeSpecialCharacters(tokens)

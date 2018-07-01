@@ -31,10 +31,8 @@ def main():
     chatMatrix1 = transformer.transformChatMatrixByMessageAsDF(cleanedChat)
     chatMatrix = transformer.transformChatMatrixBySenderAsDF(cleanedChat)
 
-    moviedf = transformer.transformMoviesMatrixAsDF([cleanedMovie1, cleanedMovie2])
-
-    print(moviedf)
-
+    #moviedf = transformer.transformMoviesMatrixAsDF([cleanedMovie1, cleanedMovie2])
+    textProcessor.create_tfidf_from_dataframe(chatMatrix1)
 
     #chat1 = textProcessor.createTFIDFMatrix(chatMatrix2)
 

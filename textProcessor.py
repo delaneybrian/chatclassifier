@@ -1,101 +1,48 @@
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import LinearSVC
+from sklearn.linear_model import LogisticRegression
+from cleaner import Cleaner
+from sklearn.model_selection import train_test_split, cross_val_score
 import pandas as pd
-import math
 
 class TextProcessor:
 
-    def __init__(self):
-        pass
+    def create_tfidf_from_dataframe(self, df):
 
-    def createTFIDFMatrix(self, textTuples):
+        X_train, X_test, y_train, y_test = train_test_split(df["content"], df.index, random_state=0)
 
-        corpusSet = self.__generateCorpusSet(textTuples)
+        count_vect = CountVectorizer(min_df=3)
+        X_train_counts = count_vect.fit_transform(X_train)
 
-        #tuple of name, wordDict, bow for each document
-        wordDicts = self.__generateWordDictionaries(textTuples, corpusSet)
+        tfidf_transformer = TfidfTransformer()
+        X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
 
-        tfs = self.__computeTFs(wordDicts)
+        clf = MultinomialNB().fit(X_train_tfidf, y_train)
 
-        idf = self.__computeIDF(wordDicts)
+        cleanedMessages = []
+        cleaner = Cleaner()
+        cleanedMessage = cleaner.cleanMessage("gavin in australia for working for ey")
+        cleanedMessages.append(' '.join(cleanedMessage))
 
-        tfidfTuples = []
-        for tf in tfs:
-            name, tfdict = tf
-            tfidf = self.__computeTFIDF(tfdict, idf)
-            tfidfTuples.append((name, tfidf))
+        print(cleanedMessages)
 
-        tfidfs = []
-        names = []
-        for a in tfidfTuples:
-            tfidfs.append(a[1])
-            names.append(a[0])
+        print(clf.predict(count_vect.transform(cleanedMessages)))
 
-        return pd.DataFrame.from_records(tfidfs, index=names)
+    def make_prediction_from_model(self, model, prediction):
 
 
+        cleanedMessages = []
+        cleaner = Cleaner()
+        cleanedMessage = cleaner.cleanMessage(prediction)
+        cleanedMessages.append(' '.join(cleanedMessage))
 
-    def __computeTFIDF(self, tf, idf):
-        tfidf = {}
-        for word, val in tf.items():
-            tfidf[word] = val * idf[word]
-        return tfidf
+        print(cleanedMessages)
 
-
-    def __computeTFs(self, wordDicts):
-        tfs = []
-        for wordDict in wordDicts:
-            name, doc, bow = wordDict
-            tfDict = {}
-            bowCount = len(bow)
-            for word, count in doc.items():
-                tfDict[word] = count / float(bowCount)
-            tfs.append((name, tfDict))
-
-        return tfs
-
-
-    def __computeIDF(self, wordDicts):
-
-        docList = []
-        for wordDict in wordDicts:
-            name, doc, bow = wordDict
-            docList.append(doc)
-
-        idfDict = {}
-        N = len(docList)
-
-        #counts the number of documents that contain a word w
-        idfDict = dict.fromkeys(docList[0].keys(), 0)
-        for doc in docList:
-            for word, val in doc.items():
-                if val > 0:
-                    idfDict[word] += 1
-
-        #divide N by denominator above, take log of that
-        for word, val in idfDict.items():
-            idfDict[word] = math.log(N / float(val))
-
-        return idfDict
+        print(model.predict(count_vect.transform(cleanedMessages)))
 
 
 
-    def __generateWordDictionaries(self, textTuples, corpusSet):
-        wordDicts = []
-        for textTuple in textTuples:
-            wordDict = dict.fromkeys(corpusSet, 0)
-            name, bow = textTuple
-
-            for word in bow:
-                wordDict[word] += 1
-
-            wordDicts.append((name, wordDict, bow))
-
-        return wordDicts
 
 
-    def __generateCorpusSet(self, textTuples):
-        allWords = set()
-        for textTuple in textTuples:
-            name, bow = textTuple
-            for word in bow:
-                allWords.add(word)
-        return allWords
