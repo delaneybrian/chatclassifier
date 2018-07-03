@@ -3,7 +3,6 @@ from cleaner import Cleaner
 from chatFactory import ChatFactory
 from movieFactory import MovieFactory
 from transformer import Transformer
-from textProcessor import TextProcessor
 from model import Model
 
 def main():
@@ -13,7 +12,6 @@ def main():
     movieFactory = MovieFactory()
     chatFactory = ChatFactory()
     transformer = Transformer()
-    textProcessor = TextProcessor()
     model = Model()
 
     rawChat = repository.getChatById(2)
@@ -32,11 +30,8 @@ def main():
     chatMatrix = transformer.transformChatMatrixBySenderAsDF(cleanedChat)
 
     #moviedf = transformer.transformMoviesMatrixAsDF([cleanedMovie1, cleanedMovie2])
-    textProcessor.create_tfidf_from_dataframe(chatMatrix1)
-
-    #chat1 = textProcessor.createTFIDFMatrix(chatMatrix2)
-
-    #model.trainChatClassifier(chat1)
+    #model.create_chat_model_from_dataframe(chatMatrix1, 1)
+    print(model.make_prediction_from_model("why does it always rain on poor old dan smyth who knows its cause it the slick bugger", 1))
 
 
     print("Finished")
