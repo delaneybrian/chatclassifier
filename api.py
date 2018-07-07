@@ -4,8 +4,10 @@ from provider import Provider
 app = Flask(__name__)
 
 @app.route('/trainchat')
-def home_page():
-    return "Home Page"
+def train_chat():
+    provider = Provider()
+    chat_id = request.args.get('chatId')
+    provider.train_chat_model(chat_id)
 
 @app.route('/makeprediction')
 def make_prediction():

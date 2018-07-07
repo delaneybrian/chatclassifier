@@ -29,7 +29,6 @@ class Provider:
     def add_new_movies_df(self):
         self.comparer.create_all_movies_df()
 
-    #Not Finished Yet
     def find_movie_comparisons_from_chat(self, chatId):
         rawChat = self.repository.getChatById(chatId)
         chat = self.chatFactory.createChat(rawChat)
@@ -37,5 +36,5 @@ class Provider:
         chatMatrix = self.transformer.transformChatMatrixBySenderAsDF(cleanedChat)
         chatMovieDf = self.comparer.create_chat_movie_df(chatMatrix)
 
-        #Need to call something here to run the actual comparison
-        return 1
+        comparison = self.comparer.generate_comparison(chatMovieDf, chatMatrix)
+        return comparison
