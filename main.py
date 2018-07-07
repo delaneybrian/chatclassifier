@@ -1,9 +1,3 @@
-from repository import Repository
-from cleaner import Cleaner
-from chatFactory import ChatFactory
-from movieFactory import MovieFactory
-from transformer import Transformer
-from model import Model
 
 def main():
 
@@ -14,25 +8,27 @@ def main():
     transformer = Transformer()
     model = Model()
 
+    comparer = Comparer()
+
     rawChat = repository.getChatById(2)
-    rawMovie1 = repository.getMovieById(1)
-    rawMovie2 = repository.getMovieById(6)
-
     chat = chatFactory.createChat(rawChat)
-    movie1 = movieFactory.createMovie(rawMovie1)
-    movie2 = movieFactory.createMovie(rawMovie2)
-
     cleanedChat = cleaner.cleanChat(chat)
-    cleanedMovie1 = cleaner.cleanMovie(movie1)
-    cleanedMovie2 = cleaner.cleanMovie(movie2)
+    chatMatrix1 = transformer.transformChatMatrixBySenderAsDF(cleanedChat)
+    chatMovieDf = comparer.create_chat_movie_df(chatMatrix1)
 
+    print(chatMovieDf.head(100))
+
+    #comparer.create_all_movies_df()
+
+    """
+    #Chat Stuff
+    rawChat = repository.getChatById(2)
+    chat = chatFactory.createChat(rawChat)
+    cleanedChat = cleaner.cleanChat(chat)
     chatMatrix1 = transformer.transformChatMatrixByMessageAsDF(cleanedChat)
-    chatMatrix = transformer.transformChatMatrixBySenderAsDF(cleanedChat)
-
-    #moviedf = transformer.transformMoviesMatrixAsDF([cleanedMovie1, cleanedMovie2])
-    #model.create_chat_model_from_dataframe(chatMatrix1, 1)
-    print(model.make_prediction_from_model("why does it always rain on poor old dan smyth who knows its cause it the slick bugger", 1))
-
+    model.create_chat_model_from_dataframe(chatMatrix1, 1)
+    #print(model.make_prediction_from_model("why does it always rain on poor old dan smyth who knows its cause it the slick bugger", 1))
+    """
 
     print("Finished")
 

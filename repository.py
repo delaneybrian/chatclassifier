@@ -30,7 +30,8 @@ class Repository:
         movieCollection = self.db[self.movieCollection]
         bsonMovies = movieCollection.find()
         jsonMovies = dumps(bsonMovies)
-        return jsonMovies
+        pythonMovies = json.loads(jsonMovies)
+        return pythonMovies
 
     def addTrainedChatModel(self, trainedChatModel):
         chatModelCollection = self.db[self.trainedChatCollection]
@@ -49,4 +50,3 @@ class Repository:
         jsonChatId = dumps(bsonChatId[0])
         idDIct = json.loads(jsonChatId)
         return idDIct["_id"]
-

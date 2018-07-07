@@ -48,7 +48,7 @@ class Transformer:
 
     def transformMoviesMatrixAsDF(self, movies):
         alldf = []
-        for i in range(0, len(movies)):
+        for i in range(0, len(movies) - 1):
             df = self.transformMovieMatrixAsDF(movies[i])
             alldf.append(df)
 
