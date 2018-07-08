@@ -28,8 +28,9 @@ class Model:
         #print(cross_val_score(pipeline, X_train, y_train, cv=3, scoring="accuracy"))
 
     def make_prediction_from_model(self, modelId, message):
+        dir_path = os.path.dirname(os.path.realpath(__file__)) + '/ChatModels/'
 
-        with open(str(modelId) +'.pickle', 'rb') as handle:
+        with open(dir_path + str(modelId) +'.pickle', 'rb') as handle:
             pipeline = pickle.load(handle)
 
         cleanedMessages = []
