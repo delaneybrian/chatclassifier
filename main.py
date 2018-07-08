@@ -4,7 +4,7 @@ def main():
 
     provider = Provider()
 
-    msg = provider.make_prediction_from_chat_model(1, "hello this is the boss of the capture")
+    msg = provider.find_movie_comparisons_from_chat(2)
 
     print(msg)
 

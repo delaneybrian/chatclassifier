@@ -14,7 +14,7 @@ class Repository:
 
     def getChatById(self, id):
         chatCollection = self.db[self.testCollection]
-        bsonChat = chatCollection.find_one({"_id": id})
+        bsonChat = chatCollection.find_one({"_id": int(id)})
         jsonChat = dumps(bsonChat)
         pythonChat = json.loads(jsonChat)
         return pythonChat

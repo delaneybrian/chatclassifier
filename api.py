@@ -16,7 +16,7 @@ def make_prediction():
     message = request.args.get('message')
     prediction = provider.make_prediction_from_chat_model(chat_id, message)
 
-    return jsonify(prediction)
+    return jsonify(prediction[0])
 
 @app.route('/createmoviesdf')
 def create_movies_df():
