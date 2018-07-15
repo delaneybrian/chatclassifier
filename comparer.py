@@ -86,4 +86,26 @@ class Comparer:
 
             most_similar[chat_individual] = (movie_individual, similarity_value)
 
-        return most_similar
+        movie_comparisons = []
+        for key, value in most_similar.items():
+            movie_name, movie_value = value
+            split_movie = movie_name.split('++++')
+
+            chat_participant_name = key
+
+            if(len(split_movie) == 3):
+                movie_character = split_movie[0].strip()
+                movie_name = split_movie[1].strip()
+                movie_id = split_movie[2].strip()
+            else:
+                continue
+
+            dict = {}
+            dict["chatparticipant"] = chat_participant_name
+            dict["movieid"] = movie_id
+            dict["moviename"] = movie_name
+            dict["moviecharacter"] = movie_character
+
+            movie_comparisons.append(dict)
+
+        return movie_comparisons

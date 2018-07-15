@@ -39,4 +39,4 @@ def chat_movies_comparison():
         comparisons = provider.find_movie_comparisons_from_chat(chat_id)
         return jsonify(comparisons)
     except:
-        print("Count Not Create Movies Comparison")
+        print("Could Not Create Movies Comparison")
