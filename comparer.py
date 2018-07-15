@@ -108,4 +108,7 @@ class Comparer:
 
             movie_comparisons.append(dict)
 
-        return movie_comparisons
+        final_dict = {}
+        final_dict["comparisons"] = movie_comparisons
+
+        return final_dict
