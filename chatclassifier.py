@@ -12,6 +12,7 @@ def train_chat():
         return "True"
     except:
         print("Could Not Train Chat")
+        return "False"
 
 @app.route('/makeprediction')
 def make_prediction():
