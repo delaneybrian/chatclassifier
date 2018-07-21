@@ -9,6 +9,7 @@ def train_chat():
         provider = Provider()
         chat_id = request.args.get('chatId')
         provider.train_chat_model(chat_id)
+        return "True"
     except:
         print("Could Not Train Chat")
 
@@ -22,14 +23,17 @@ def make_prediction():
         return jsonify(prediction[0])
     except:
         print("Could Not Make Prediction")
+        return "False"
 
 @app.route('/createmoviesdf')
 def create_movies_df():
     try:
         provider = Provider()
         provider.add_new_movies_df()
+        return "True"
     except:
         print("Could Not Create Movies DF")
+        return "False"
 
 @app.route('/chatmoviescomparison')
 def chat_movies_comparison():
@@ -40,3 +44,4 @@ def chat_movies_comparison():
         return jsonify(comparisons)
     except:
         print("Could Not Create Movies Comparison")
+        return "False"
