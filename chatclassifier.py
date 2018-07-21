@@ -10,8 +10,9 @@ def train_chat():
         chat_id = request.args.get('chatId')
         provider.train_chat_model(chat_id)
         return "True"
-    except:
+    except Exception as e:
         print("Could Not Train Chat")
+        print(e)
         return "False"
 
 @app.route('/makeprediction')
