@@ -3,10 +3,6 @@ from provider import Provider
 
 app = Flask(__name__)
 
-@app.route('/test')
-def test():
-    return 'Hello'
-
 @app.route('/trainchat')
 def train_chat():
     try:
