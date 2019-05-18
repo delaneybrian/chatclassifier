@@ -26,7 +26,7 @@ def make_prediction():
         return jsonify(prediction[0])
     except Exception as e:
         app.logger.info('Could Not Make Prediction - {}'.format(e))
-        return "False"
+        return e
 
 @app.route('/createmoviesdf')
 def create_movies_df():
