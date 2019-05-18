@@ -10,3 +10,6 @@ RUN pip install -r /tmp/requirements.txt
 # copy over our app code
 COPY ./app /app
 
+RUN mkdir /app/ChatModels
+RUN mkdir /app/MoviesDfs
+
