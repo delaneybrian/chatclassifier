@@ -13,7 +13,7 @@ def train_chat():
         return "True"
     except Exception as e:
         app.logger.info('Could Not Train Chat - {}'.format(e))
-        return e
+        return str(e)
 
 @app.route('/makeprediction')
 def make_prediction():
