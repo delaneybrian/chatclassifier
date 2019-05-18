@@ -11,8 +11,7 @@ def train_chat():
         provider.train_chat_model(chat_id)
         return "True"
     except Exception as e:
-        print("Could Not Train Chat")
-        print(e)
+        app.logger.info('Could Not Train Chat - {}'.format(e))
         return "False"
 
 @app.route('/makeprediction')
@@ -23,8 +22,8 @@ def make_prediction():
         message = request.args.get('message')
         prediction = provider.make_prediction_from_chat_model(chat_id, message)
         return jsonify(prediction[0])
-    except:
-        print("Could Not Make Prediction")
+    except Exception as e:
+        app.logger.info('Could Not Make Prediction - {}'.format(e))
         return "False"
 
 @app.route('/createmoviesdf')
@@ -33,8 +32,8 @@ def create_movies_df():
         provider = Provider()
         provider.add_new_movies_df()
         return "True"
-    except:
-        print("Could Not Create Movies DF")
+    except Exception as e:
+        app.logger.info('Could Not Create Movies DF - {}'.format(e))
         return "False"
 
 @app.route('/chatmoviescomparison')
@@ -44,6 +43,6 @@ def chat_movies_comparison():
         chat_id = request.args.get('chatId')
         comparisons = provider.find_movie_comparisons_from_chat(chat_id)
         return jsonify(comparisons)
-    except:
-        print("Could Not Create Movies Comparison")
+    except Exception as e:
+        app.logger.info('Could Not Create Movies Comparison - {}'.format(e))
         return "False"
