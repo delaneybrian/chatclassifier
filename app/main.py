@@ -1,11 +1,13 @@
 from flask import Flask, jsonify, request
 from provider import Provider
+import sys
 
 app = Flask(__name__)
 
 @app.route('/trainchat')
 def train_chat():
     try:
+        app.logger.info('TRAINING CHAT')
         provider = Provider()
         chat_id = request.args.get('chatId')
         provider.train_chat_model(chat_id)
