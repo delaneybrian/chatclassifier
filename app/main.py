@@ -6,14 +6,14 @@ app = Flask(__name__)
 
 @app.route('/trainchat')
 def train_chat():
-    try:
+    #try:
         provider = Provider()
         chat_id = request.args.get('chatId')
         provider.train_chat_model(chat_id)
         return "True"
-    except Exception as e:
-        app.logger.info('Could Not Train Chat - {}'.format(e))
-        return str(e)
+    #except Exception as e:
+    #   app.logger.info('Could Not Train Chat - {}'.format(e))
+    #   return str(e)
 
 @app.route('/makeprediction')
 def make_prediction():
